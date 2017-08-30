@@ -30,6 +30,7 @@ public class TeacherActivity extends Activity {
     private TextView draft_textView;
     private Button draft_button;
     private Button roster_button;
+    private Button leftover_button;
 
     private DatabaseReference profile;
     private DatabaseReference firstDraft;
@@ -42,6 +43,7 @@ public class TeacherActivity extends Activity {
     private boolean goBack;
     private long draft;
     private boolean alreadyDrafted;
+    private boolean finished;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class TeacherActivity extends Activity {
         FirebaseUser user = auth.getCurrentUser();
 
         goBack = false;
+        finished = false;
 
         database = FirebaseDatabase.getInstance().getReference();
         profile = database.child("teachers").child(user.getUid());
@@ -185,12 +188,23 @@ public class TeacherActivity extends Activity {
             });
         });
 
+        leftover_button = findViewById(R.id.button_leftover);
+        leftover_button.setOnClickListener(e -> {
+            Intent i = new Intent(TeacherActivity.this, TeacherLeftoverActivity.class);
+            startActivity(i);
+        });
+
         oceanside_button = findViewById(R.id.button_oceanside);
         oceanside_button.setTransformationMethod(null);
         oceanside_button.setOnClickListener(e -> {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://oceansideschools.org/"));
             startActivity(i);
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         profile.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -202,13 +216,13 @@ public class TeacherActivity extends Activity {
             }
         });
 
-        database.addValueEventListener(new ValueEventListener() {
+        database.child("draft").addValueEventListener(new ValueEventListener() {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("draft").exists()) {
-                    draft = (long) dataSnapshot.child("draft").getValue();
+                if(dataSnapshot.exists()) {
+                    draft = (long) dataSnapshot.getValue();
                 } else {
                     database.child("draft").setValue(-1);
                     draft = -1;
@@ -216,7 +230,7 @@ public class TeacherActivity extends Activity {
                 if(draft < 1) draft = 0;
 
                 float currentProgress = draft_progressBar.getProgress();
-                ValueAnimator animator = ValueAnimator.ofFloat(currentProgress, (float)((draft*33) + 1));
+                ValueAnimator animator = ValueAnimator.ofFloat(currentProgress, (float)(((draft > 3 ? 3 : draft)*33) + 1));
                 animator.addUpdateListener(e -> {
                     float updatedValue = (float) e.getAnimatedValue();
                     draft_progressBar.setSecondaryProgress(updatedValue);
@@ -225,26 +239,54 @@ public class TeacherActivity extends Activity {
                 animator.setDuration(160);
                 animator.start();
 
-                boolean finished = false;
-
-                if(auth.getCurrentUser() != null) {
-                    finished = (boolean) dataSnapshot.child("teachers")
-                            .child(auth.getCurrentUser().getUid()).child("finished").getValue();
-                }
-
                 if(draft == 0) {
                     draft_textView.setText(R.string.being);
-                    draft_button.setVisibility(View.INVISIBLE);
+                    draft_button.setVisibility(View.GONE);
                 } else if(draft == 4){
+                    draft_textView.setText(R.string.handling);
+                    draft_button.setVisibility(View.GONE);
+                } else if(draft == 5) {
                     draft_textView.setText(R.string.completed);
-                    draft_button.setVisibility(View.INVISIBLE);
+                    draft_button.setVisibility(View.GONE);
                 } else {
                     draft_textView.setText("The draft is currently in round " + draft + " of 3.");
                     draft_button.setVisibility(View.VISIBLE);
                 }
 
                 if(finished) {
-                    draft_button.setVisibility(View.INVISIBLE);
+                    draft_button.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        database.child("teachers").child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                finished = (boolean) dataSnapshot.child("finished").getValue();
+
+                if(finished) {
+                    draft_button.setVisibility(View.GONE);
+                } else {
+                    draft_button.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        database.child("leftover-students").child("complete").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    boolean complete = (boolean) dataSnapshot.getValue();
+
+                    if(!complete) {
+                        leftover_button.setVisibility(View.VISIBLE);
+                    } else {
+                        leftover_button.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -273,10 +315,25 @@ public class TeacherActivity extends Activity {
                         if(moveOn) {
                             for(DataSnapshot teacher : dataSnapshot.getChildren()) {
                                String uid = teacher.getKey();
-
-                               database.child("teachers").child(uid).child("finished").setValue(false);
+                               if(draft + 1  < 4)
+                                   database.child("teachers").child(uid).child("finished").setValue(false);
                             }
-                            database.child("draft").setValue(draft + 1);
+
+                            database.child("leftover-students").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {}
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(draft + 1 == 4 && dataSnapshot.exists()) {
+                                        database.child("leftover-students").child("complete").setValue(false);
+                                        database.child("draft").setValue(draft + 1);
+                                    } else if(draft + 1 == 4) {
+                                        database.child("draft").setValue(5);
+                                    } else {
+                                        database.child("draft").setValue(draft + 1);
+                                    }
+                                }
+                            });
                         }
                     }
                 });
@@ -292,16 +349,14 @@ public class TeacherActivity extends Activity {
                     .setTitle("Continue?")
                     .setMessage("Are you sure you want to log out?")
                     .setPositiveButton(android.R.string.yes, (a, b) -> {
-                        new Thread(() -> {
-                            goBack = true;
-                            runOnUiThread(() -> onBackPressed());
-                        }).start();
+                        goBack = true;
+                        runOnUiThread(() -> onBackPressed());
                     })
                     .setNegativeButton(android.R.string.no, null).show();
         } else {
             goBack = false;
             auth.signOut();
-            super.onBackPressed();
+            finishAfterTransition();
         }
     }
 }

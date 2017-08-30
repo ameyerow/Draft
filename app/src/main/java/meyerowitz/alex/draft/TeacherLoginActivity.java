@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
@@ -26,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 public class TeacherLoginActivity extends Activity {
     private ImageView login_imageView;
@@ -102,6 +105,8 @@ public class TeacherLoginActivity extends Activity {
                                             Toast.makeText(TeacherLoginActivity.this, "Must verify email.",
                                                     Toast.LENGTH_SHORT).show();
                                         } else {
+                                            password_editText.getText().clear();
+
                                             Intent i = new Intent(TeacherLoginActivity.this, TeacherActivity.class);
                                             startActivity(i);
                                         }
@@ -131,6 +136,15 @@ public class TeacherLoginActivity extends Activity {
         create_button = findViewById(R.id.button_create);
         create_button.setOnClickListener(e -> {
             Intent i = new Intent(TeacherLoginActivity.this, TeacherCreateActivity.class);
+
+            String username = TextUtils.isEmpty(username_editText.getText()) ? "" : username_editText.getText().toString();
+            String password = TextUtils.isEmpty(password_editText.getText()) ? "" : password_editText.getText().toString();
+
+            i.putExtra(TeacherCreateActivity.EXTRA_EMAIL, username);
+            i.putExtra(TeacherCreateActivity.EXTRA_PASSWORD, password);
+
+            password_editText.getText().clear();
+
             startActivity(i);
         });
 

@@ -65,8 +65,11 @@ public class TeacherDraftActivity extends ListActivity {
     private ImageView lastImageView;
     private int shortAnimationDuration;
     private int lastPositionPressed;
+    private String teacherName;
+    private String teacherEmail;
     private long numCanDraft;
     private long maxNum;
+    private long draft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +135,33 @@ public class TeacherDraftActivity extends ListActivity {
                         childUpdates.put("/drafted/" + auth.getCurrentUser().getUid()+"/"+uid, draftedValues);
                         childUpdates.put("/removed-from-draft/"+uid, removedValues);
                         database.updateChildren(childUpdates);
+
+                        database.child("students").child(uid).child("drafted").setValue(true);
+                        database.child("students").child(uid).child("teacher").setValue(teacherName);
+                        database.child("students").child(uid).child("teacherEmail").setValue(teacherEmail);
+
+                        database.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {}
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    String first = (String) snapshot.child("firstName").getValue();
+                                    String last = (String) snapshot.child("lastName").getValue();
+
+                                    String partnerFirst = name2.substring(0, name2.indexOf(" "));
+                                    String partnerLast = name2.substring(name2.indexOf(" ") + 1, name2.length());
+
+                                    if(first.equals(partnerFirst) && last.equals(partnerLast)) {
+                                        String partner_uid = snapshot.getKey();
+                                        database.child("students").child(partner_uid).child("drafted").setValue(true);
+                                        database.child("students").child(partner_uid).child("teacher").setValue(teacherName);
+                                        database.child("students").child(partner_uid).child("teacherEmail").setValue(teacherEmail);
+                                        break;
+                                    }
+                                }
+                            }
+                        });
                     } else {
                         name = name.substring(2, name.length());
                         Map<String, Object> draftedValues = new HashMap<>();
@@ -146,8 +176,63 @@ public class TeacherDraftActivity extends ListActivity {
                         childUpdates.put("/drafted/" + auth.getCurrentUser().getUid()+"/"+uid, draftedValues);
                         childUpdates.put("/removed-from-draft/"+uid, removedValues);
                         database.updateChildren(childUpdates);
+
+                        database.child("students").child(uid).child("drafted").setValue(true);
+                        database.child("students").child(uid).child("teacher").setValue(teacherName);
+                        database.child("students").child(uid).child("teacherEmail").setValue(teacherEmail);
                     }
                 }
+            }
+
+            // If this is the last draft, move the left over students to a separate category
+            if(draft + 1 == 4) {
+                database.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(int i = 0; i < names.size(); i++) {
+                            Boolean status = drafted.get(i);
+                            if(!status) {
+                                String name = names.get(i);
+                                String uid = uids.get(i);
+                                String email = emails.get(i);
+                                String project = projects.get(i);
+                                boolean partnered = name.substring(0, 1).equals("2");
+
+                                if(partnered) {
+                                    String name1 = name.substring(2, name.indexOf("&") - 1);
+                                    String name2 = name.substring(name.indexOf("&") + 2, name.length());
+                                    String email1 = email.substring(0, email.indexOf(" "));
+                                    String email2 = email.substring(email.indexOf(" ") + 1, email.length());
+
+                                    Map<String, Object> leftoverValues = new HashMap<>();
+                                    leftoverValues.put("partnered", partnered);
+                                    leftoverValues.put("name1", name1);
+                                    leftoverValues.put("name2", name2);
+                                    leftoverValues.put("email1", email1);
+                                    leftoverValues.put("email2", email2);
+                                    leftoverValues.put("project", project);
+
+                                    Map<String, Object> childUpdates = new HashMap<>();
+                                    childUpdates.put("/leftover-students/" + uid, leftoverValues);
+                                    database.updateChildren(childUpdates);
+                                } else {
+                                    name = name.substring(2, name.length());
+                                    Map<String, Object> leftoverValues = new HashMap<>();
+                                    leftoverValues.put("partnered", partnered);
+                                    leftoverValues.put("name1", name);
+                                    leftoverValues.put("email1", email);
+                                    leftoverValues.put("project", project);
+
+                                    Map<String, Object> childUpdates = new HashMap<>();
+                                    childUpdates.put("/leftover-students/" + uid, leftoverValues);
+                                    database.updateChildren(childUpdates);
+                                }
+                            }
+                        }
+                    }
+                });
             }
 
             Intent returnIntent = new Intent();
@@ -160,18 +245,22 @@ public class TeacherDraftActivity extends ListActivity {
             String name = names.get(lastPositionPressed);
             if(name.substring(0, 1).equals("1")) {
                 if(numCanDraft - 1 >= 0) {
+                    if((drafted.get(lastPositionPressed) != null && !drafted.get(lastPositionPressed))
+                            || drafted.get(lastPositionPressed) == null)
+                        numCanDraft = numCanDraft - 1;
                     drafted.set(lastPositionPressed, true);
                     lastImageView.setImageResource(R.drawable.accept_single);
-                    numCanDraft = numCanDraft - 1;
                     currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 } else {
                     Toast.makeText(this, "Not enough space left.", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 if(numCanDraft - 2 >= 0) {
+                    if(drafted.get(lastPositionPressed) != null && !drafted.get(lastPositionPressed)
+                            || drafted.get(lastPositionPressed) == null)
+                        numCanDraft = numCanDraft - 2;
                     drafted.set(lastPositionPressed, true);
                     lastImageView.setImageResource(R.drawable.accept_partners);
-                    numCanDraft = numCanDraft - 2;
                     currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 } else {
                     Toast.makeText(this, "Not enough space left.", Toast.LENGTH_SHORT).show();
@@ -231,6 +320,17 @@ public class TeacherDraftActivity extends ListActivity {
                 maxNum = (long) dataSnapshot.child("numberClasses").getValue() * 10;
                 numCanDraft = maxNum - currentNumDrafted;
                 currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
+                teacherName = dataSnapshot.child("firstName").getValue() + " " + dataSnapshot.child("lastName").getValue();
+                teacherEmail = (String) dataSnapshot.child("email").getValue();
+            }
+        });
+
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                draft = (long) dataSnapshot.child("draft").getValue();
             }
         });
     }
@@ -337,7 +437,7 @@ public class TeacherDraftActivity extends ListActivity {
             boolean partnered = name.substring(0, 1).equals("2");
             name = name.substring(2, name.length());
 
-            ImageView listItem_imageView = (ImageView) convertView.findViewById(R.id.imageView_listItem);
+            ImageView listItem_imageView = convertView.findViewById(R.id.imageView_listItem);
 
             if(drafted.get(position) == null) {
                 if (partnered) {
@@ -357,7 +457,7 @@ public class TeacherDraftActivity extends ListActivity {
                 }
             }
 
-            TextView name_textView = (TextView) convertView.findViewById(R.id.textView_name);
+            TextView name_textView = convertView.findViewById(R.id.textView_name);
             name_textView.setText(name);
 
             return convertView;

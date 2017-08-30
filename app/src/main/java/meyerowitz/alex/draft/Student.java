@@ -16,14 +16,14 @@ public class Student {
     private String thirdChoice;
     private String projectIdea;
     private String email;
-    private String fcmToken;
+    private boolean partnered;
 
     public Student() {
         // Default constructor required for calls to DataSnapshot.getValue(Student.class)
     }
 
     public Student(String lastName, String firstName, String partnerLast, String partnerFirst, String firstChoice,
-                   String secondChoice, String thirdChoice, String projectIdea, String email, String fcmToken) {
+                   String secondChoice, String thirdChoice, String projectIdea, String email, boolean partnered) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.partnerLast = partnerLast;
@@ -33,7 +33,7 @@ public class Student {
         this.thirdChoice = thirdChoice;
         this.projectIdea = projectIdea;
         this.email = email;
-        this.fcmToken = fcmToken;
+        this.partnered = partnered;
     }
 
     public Map<String, Object> toMap() {
@@ -47,7 +47,8 @@ public class Student {
         studentValues.put("thirdChoice", thirdChoice);
         studentValues.put("projectIdea", projectIdea);
         studentValues.put("email", email);
-        studentValues.put("fcm-token", fcmToken);
+        studentValues.put("partnered", partnered);
+        studentValues.put("drafted", false);
 
         return studentValues;
     }

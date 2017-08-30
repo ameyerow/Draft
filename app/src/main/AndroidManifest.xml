@@ -57,6 +57,9 @@
         <activity android:name=".TeacherDraftActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
+        <activity android:name=".TeacherLeftoverActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
     </application>
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_channel"

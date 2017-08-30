@@ -26,6 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TeacherCreateActivity extends Activity {
+    public static final String EXTRA_EMAIL = "EXTRA_EMAIL";
+    public static final String EXTRA_PASSWORD = "EXTRA_PASSWORD";
+
     private Toolbar create_toolbar;
     private Button create_account_button;
     private EditText last_name_editText;
@@ -58,9 +61,15 @@ public class TeacherCreateActivity extends Activity {
 
         last_name_editText = findViewById(R.id.editText_last_name);
         first_name_editText = findViewById(R.id.editText_first_name);
+
         email_editText = findViewById(R.id.editText_email);
+        String login_email = getIntent().getStringExtra(EXTRA_EMAIL);
+        if(!login_email.equals("")) email_editText.setText(login_email);
 
         pass_editText = findViewById(R.id.editText_pass);
+        String login_pass = getIntent().getStringExtra(EXTRA_PASSWORD);
+        if(!login_pass.equals("")) pass_editText.setText(login_pass);
+
         pass_confirm_editText = findViewById(R.id.editText_pass_confirm);
 
         numberClasses_editText = findViewById(R.id.editText_numberClasses);
@@ -96,12 +105,14 @@ public class TeacherCreateActivity extends Activity {
                                     if(task.isSuccessful()) {
                                         String lastName = last_name_editText.getText().toString().trim();
                                         String firstName = first_name_editText.getText().toString().trim();
-                                        String fcmToken = FirebaseInstanceId.getInstance().getToken();
+                                        String pushToken = FirebaseInstanceId.getInstance().getToken();
                                         int numberClasses = Integer.parseInt(numberClasses_editText.getText().toString().trim());
 
                                         FirebaseUser user = task.getResult().getUser();
-                                        Teacher teacher = new Teacher(lastName, firstName, numberClasses, fcmToken);
+                                        Teacher teacher = new Teacher(lastName, firstName, numberClasses, email);
                                         Map<String, Object> teacherValues = teacher.toMap();
+
+                                        database.child("pushTokens").child(user.getUid()).child("pushToken").setValue(pushToken);
 
                                         Map<String, Object> childUpdates = new HashMap<>();
                                         childUpdates.put("/teachers/" + user.getUid(), teacherValues);

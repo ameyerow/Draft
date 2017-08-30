@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.View;
@@ -99,6 +100,8 @@ public class StudentLoginActivity extends Activity {
                                             Toast.makeText(StudentLoginActivity.this, "Incorrect account type.",
                                                     Toast.LENGTH_SHORT).show();
                                         } else {
+                                            password_editText.getText().clear();
+
                                             Intent i = new Intent(StudentLoginActivity.this, StudentActivity.class);
                                             startActivity(i);
                                         }
@@ -129,6 +132,15 @@ public class StudentLoginActivity extends Activity {
         create_button.setOnClickListener(e -> {
             if(draft == 0) {
                 Intent i = new Intent(StudentLoginActivity.this, StudentCreateActivity.class);
+
+                String username = TextUtils.isEmpty(username_editText.getText()) ? "" : username_editText.getText().toString();
+                String password = TextUtils.isEmpty(password_editText.getText()) ? "" : password_editText.getText().toString();
+
+                i.putExtra(StudentCreateActivity.EXTRA_EMAIL, username);
+                i.putExtra(StudentCreateActivity.EXTRA_PASSWORD, password);
+
+                password_editText.getText().clear();
+
                 startActivity(i);
             }
         });

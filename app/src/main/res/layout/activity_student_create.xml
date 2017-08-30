@@ -18,8 +18,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText_last_name"
-                android:hint="@string/last_name"
+                android:id="@+id/editText_first_name"
+                android:hint="@string/first_name"
                 android:layout_centerHorizontal="true"
                 android:transitionName="top_editText"
                 android:windowSoftInputMode="stateHidden"
@@ -30,9 +30,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:id="@+id/editText_first_name"
-                android:hint="@string/first_name"
-                android:layout_below="@id/editText_last_name"
+                android:hint="@string/last_name"
+                android:id="@+id/editText_last_name"
+                android:layout_below="@id/editText_first_name"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
                 android:transitionName="bottom_editText"
@@ -42,7 +42,7 @@
                 android:layout_height="60dp"
                 android:id="@+id/imageView_contact"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/editText_first_name"
+                android:layout_below="@id/editText_last_name"
                 android:transitionName="contact"/>
             <TextView
                 android:layout_width="wrap_content"

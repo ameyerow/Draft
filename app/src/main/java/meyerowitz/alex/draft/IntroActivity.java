@@ -66,7 +66,6 @@ public class IntroActivity extends Activity {
         longAnimationDuration = getResources().getInteger(android.R.integer.config_longAnimTime);
 
         auth = FirebaseAuth.getInstance();
-        FirebaseDatabase.getInstance().setLogLevel(Logger.Level.DEBUG);
         database = FirebaseDatabase.getInstance().getReference();
 
         path = "android.resource://" + getPackageName() + "/" + R.raw.blurred;

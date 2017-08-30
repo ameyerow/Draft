@@ -9,18 +9,18 @@ import java.util.Map;
 public class Teacher {
     private String lastName;
     private String firstName;
+    private String email;
     private int numberClasses;
-    private String fcmToken;
 
     public Teacher() {
         // Default constructor required for calls to DataSnapshot.getValue(Student.class)
     }
 
-    public Teacher(String lastName, String firstName, int numberClasses, String fcmToken) {
+    public Teacher(String lastName, String firstName, int numberClasses, String email) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.numberClasses = numberClasses;
-        this.fcmToken = fcmToken;
+        this.email = email;
     }
 
     public Map<String, Object> toMap() {
@@ -30,7 +30,7 @@ public class Teacher {
         teacherValues.put("numberClasses", numberClasses);
         teacherValues.put("finished", false);
         teacherValues.put("currentNumDrafted", 0);
-        teacherValues.put("fcm-token", fcmToken);
+        teacherValues.put("email", email);
 
         return teacherValues;
     }

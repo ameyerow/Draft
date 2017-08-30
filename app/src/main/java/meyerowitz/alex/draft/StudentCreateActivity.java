@@ -41,6 +41,9 @@ import java.util.List;
 import java.util.Map;
 
 public class StudentCreateActivity extends Activity {
+    public static final String EXTRA_EMAIL = "EXTRA_EMAIL";
+    public static final String EXTRA_PASSWORD = "EXTRA_PASSWORD";
+
     private ProgressDialog progressDialog;
     private Toolbar create_toolbar;
     private EditText last_name_editText;
@@ -96,7 +99,13 @@ public class StudentCreateActivity extends Activity {
         first_name_editText = findViewById(R.id.editText_first_name);
 
         email_editText = findViewById(R.id.editText_email);
+        String login_email = getIntent().getStringExtra(EXTRA_EMAIL);
+        if(!login_email.equals("")) email_editText.setText(login_email);
+
         pass_editText = findViewById(R.id.editText_pass);
+        String login_pass = getIntent().getStringExtra(EXTRA_PASSWORD);
+        if(!login_pass.equals("")) pass_editText.setText(login_pass);
+
         pass_confirm_editText = findViewById(R.id.editText_pass_confirm);
 
         contact_imageView = findViewById(R.id.imageView_contact);
@@ -152,13 +161,12 @@ public class StudentCreateActivity extends Activity {
                             String secondChoice = second_spinner.getSelectedItem().toString().trim();
                             String thirdChoice = third_spinner.getSelectedItem().toString().trim();
                             String projectIdea = project_editText.getText().toString().trim();
-                            String fcmToken = FirebaseInstanceId.getInstance().getToken();
+                            String pushToken = FirebaseInstanceId.getInstance().getToken();
                             partnered = !partner_last.equals("null") && !partner_first.equals("null");
 
                             FirebaseUser user = task.getResult().getUser();
-                            Student student = new Student(lastName, firstName, partner_last, partner_first,
-                                    firstChoice, secondChoice, thirdChoice, projectIdea, email, fcmToken);
-                            Map<String, Object> studentValues = student.toMap();
+
+                            database.child("pushTokens").child(user.getUid()).child("pushToken").setValue(pushToken);
 
                             // If the user chose a partner, check if that partner has picked them also
                             if(partnered) {
@@ -185,6 +193,13 @@ public class StudentCreateActivity extends Activity {
                                                 String snap_firstChoice = (String) snapshot.child("firstChoice").getValue();
                                                 String snap_secondChoice = (String) snapshot.child("secondChoice").getValue();
                                                 String snap_thirdChoice = (String) snapshot.child("thirdChoice").getValue();
+
+                                                // Update partner's values
+                                                DatabaseReference snap_user = database.child("students").child(snap_Uid);
+                                                snap_user.child("partnered").setValue(true);
+                                                snap_user.child("firstChoice").setValue(firstChoice);
+                                                snap_user.child("secondChoice").setValue(secondChoice);
+                                                snap_user.child("thirdChoice").setValue(thirdChoice);
 
                                                 Query firstQuery = database.child("first-draft").child(teacherUidMap.get(snap_firstChoice))
                                                         .orderByKey().equalTo(snap_Uid);
@@ -227,6 +242,10 @@ public class StudentCreateActivity extends Activity {
                                         }
 
                                         if(partnered) {
+                                            Student student = new Student(lastName, firstName, partner_last, partner_first,
+                                                    firstChoice, secondChoice, thirdChoice, projectIdea, email, true);
+                                            Map<String, Object> studentValues = student.toMap();
+
                                             Map<String, Object> choiceValues = new HashMap<>();
                                             choiceValues.put("partnered", partnered);
                                             choiceValues.put("name1", firstName + " " + lastName);
@@ -243,6 +262,10 @@ public class StudentCreateActivity extends Activity {
 
                                             database.updateChildren(childUpdates);
                                         } else {
+                                            Student student = new Student(lastName, firstName, partner_last, partner_first,
+                                                    firstChoice, secondChoice, thirdChoice, projectIdea, email, false);
+                                            Map<String, Object> studentValues = student.toMap();
+
                                             Map<String, Object> choiceValues = new HashMap<>();
                                             choiceValues.put("partnered", partnered);
                                             choiceValues.put("name1", firstName + " " + lastName);
@@ -260,6 +283,10 @@ public class StudentCreateActivity extends Activity {
                                     }
                                 });
                             } else {
+                                Student student = new Student(lastName, firstName, partner_last, partner_first,
+                                        firstChoice, secondChoice, thirdChoice, projectIdea, email, false);
+                                Map<String, Object> studentValues = student.toMap();
+
                                 Map<String, Object> choiceValues = new HashMap<>();
                                 choiceValues.put("partnered", partnered);
                                 choiceValues.put("name1", firstName + " " + lastName);

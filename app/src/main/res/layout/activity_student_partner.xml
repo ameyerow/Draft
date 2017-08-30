@@ -41,26 +41,26 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText_last_name"
-                    android:hint="@string/last_name"
-                    android:transitionName="top_editText"
+                    android:id="@+id/editText_first_name"
+                    android:hint="@string/first_name"
                     android:layout_centerHorizontal="true"
+                    android:inputType="text"
                     android:layout_marginTop="50dp"/>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText_first_name"
-                    android:hint="@string/first_name"
-                    android:transitionName="bottom_editText"
-                    android:layout_below="@id/editText_last_name"
+                    android:id="@+id/editText_last_name"
+                    android:hint="@string/last_name"
+                    android:layout_below="@id/editText_first_name"
                     android:layout_marginBottom="50dp"
+                    android:inputType="text"
                     android:layout_centerHorizontal="true"/>
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/button_done"
                     android:transitionName="button"
-                    android:layout_below="@id/editText_first_name"
+                    android:layout_below="@id/editText_last_name"
                     android:backgroundTint="@color/colorBackground"
                     android:layout_centerHorizontal="true"
                     android:text="@string/done"/>

@@ -50,25 +50,12 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
             Log.i("User not null", "sendRegistrationToServer");
             DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
-            database.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
+            database.child("pushTokens").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {}
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.child(user.getUid()).exists()) {
-                        database.child("students").child(user.getUid()).child("fcm-token").setValue(token);
-                    }
-                }
-            });
-
-            database.child("teachers").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onCancelled(DatabaseError databaseError) {}
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.child(user.getUid()).exists()) {
-                        database.child("teachers").child(user.getUid()).child("fcm-token").setValue(token);
-                    }
+                    database.child("pushTokens").child(user.getUid()).child("pushToken").setValue(token);
                 }
             });
         }

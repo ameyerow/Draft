@@ -24,6 +24,14 @@
             android:id="@+id/button_roster"
             android:text="@string/roster"
             android:layout_below="@id/button_draft"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorBackground"
+            android:id="@+id/button_leftover"
+            android:text="@string/leftover"
+            android:layout_below="@id/button_roster"
+            android:visibility="gone"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"

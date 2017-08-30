@@ -11,6 +11,7 @@ import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -26,13 +27,16 @@ public class StudentActivity extends Activity {
     private Button oceanside_button;
     private Toolbar student_toolbar;
     private com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar draft_progressBar;
+    private ImageView profile_imageView;
+    private TextView profile_textView;
     private TextView draft_textView;
-    private ImageView first_imageView;
     private TextView first_textView;
-    private ImageView second_imageView;
     private TextView second_textView;
-    private ImageView third_imageView;
     private TextView third_textView;
+    private TextView teacher_textView;
+    private TextView email_textView;
+    private RelativeLayout choices_layout;
+    private RelativeLayout drafted_layout;
 
     private boolean goBack;
 
@@ -55,6 +59,9 @@ public class StudentActivity extends Activity {
         database = FirebaseDatabase.getInstance().getReference();
         profile = database.child("students").child(user.getUid());
 
+        choices_layout = findViewById(R.id.layout_choices);
+        drafted_layout = findViewById(R.id.layout_drafted);
+
         student_toolbar = findViewById(R.id.toolbar);
         student_toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         student_toolbar.setNavigationOnClickListener(e -> {
@@ -63,20 +70,17 @@ public class StudentActivity extends Activity {
         });
 
         draft_progressBar = findViewById(R.id.progressBar_draft);
-
         draft_textView = findViewById(R.id.textView_draft);
 
-        first_imageView = findViewById(R.id.imageView_first);
-        first_imageView.setImageResource(R.drawable.contact_circle);
+        profile_imageView = findViewById(R.id.imageView_profile);
+        profile_textView = findViewById(R.id.textView_profile);
+
         first_textView = findViewById(R.id.textView_first);
-
-        second_imageView = findViewById(R.id.imageView_second);
-        second_imageView.setImageResource(R.drawable.contact_circle);
         second_textView = findViewById(R.id.textView_second);
-
-        third_imageView = findViewById(R.id.imageView_third);
-        third_imageView.setImageResource(R.drawable.contact_circle);
         third_textView = findViewById(R.id.textView_third);
+
+        teacher_textView = findViewById(R.id.textView_teacher);
+        email_textView = findViewById(R.id.textView_email);
 
         oceanside_button = findViewById(R.id.button_oceanside);
         oceanside_button.setTransformationMethod(null);
@@ -90,7 +94,7 @@ public class StudentActivity extends Activity {
     public void onStart() {
         super.onStart();
 
-        profile.addListenerForSingleValueEvent(new ValueEventListener() {
+        profile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
             @Override
@@ -100,17 +104,31 @@ public class StudentActivity extends Activity {
                 third_textView.setText((String) dataSnapshot.child("thirdChoice").getValue());
                 student_toolbar.setTitle(dataSnapshot.child("firstName").getValue() + " "
                         + dataSnapshot.child("lastName").getValue());
+                boolean partnered = (boolean) dataSnapshot.child("partnered").getValue();
+                if(partnered) {
+                    profile_imageView.setImageResource(R.drawable.contact_partners);
+                    String name = dataSnapshot.child("firstName").getValue() + " "
+                            + dataSnapshot.child("lastName").getValue();
+                    String partner_name = dataSnapshot.child("partnerFirst").getValue() + " "
+                            + dataSnapshot.child("partnerLast").getValue();
+                    profile_textView.setText(name + " and " + partner_name);
+                } else {
+                    profile_imageView.setImageResource(R.drawable.contact_second);
+                    String name = dataSnapshot.child("firstName").getValue() + " "
+                            + dataSnapshot.child("lastName").getValue();
+                    profile_textView.setText(name);
+                }
             }
         });
 
-        database.addValueEventListener(new ValueEventListener() {
+        database.child("draft").addValueEventListener(new ValueEventListener() {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 long draft = -1;
-                if(dataSnapshot.child("draft").exists()) {
-                    draft = (long) dataSnapshot.child("draft").getValue();
+                if(dataSnapshot.exists()) {
+                    draft = (long) dataSnapshot.getValue();
                 } else {
                     database.child("draft").setValue(-1);
                 }
@@ -129,9 +147,33 @@ public class StudentActivity extends Activity {
                 if(draft == 0) {
                     draft_textView.setText(R.string.being);
                 } else if(draft == 4){
+                    draft_textView.setText(R.string.handling);
+                } else if(draft == 5) {
                     draft_textView.setText(R.string.completed);
                 } else {
                     draft_textView.setText("The draft is currently in round " + draft + " of 3.");
+                }
+            }
+        });
+
+        database.child("students").child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean drafted = (boolean) dataSnapshot.child("drafted").getValue();
+
+                if(drafted) {
+                    String teacher = (String) dataSnapshot.child("teacher").getValue();
+                    String email = (String) dataSnapshot.child("teacherEmail").getValue();
+                    teacher_textView.setText(teacher);
+                    email_textView.setText(email);
+
+                    drafted_layout.setVisibility(View.VISIBLE);
+                    choices_layout.setVisibility(View.GONE);
+                } else {
+                    choices_layout.setVisibility(View.VISIBLE);
+                    drafted_layout.setVisibility(View.GONE);
                 }
             }
         });
