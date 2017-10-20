@@ -18,7 +18,7 @@
     <string name="login">Login</string>
     <string name="remember_me">Remember me</string>
     <string name="create">Sign-up</string>
-    <string name="oceanside">ceanside High School</string>
+    <string name="oceanside">Oceanside High School</string>
     <string name="click_continue">Continue</string>
     <string name="first">First choice</string>
     <string name="second">Second choice</string>
@@ -45,4 +45,7 @@
     <string name="no_one_to_draft">There\'s no one to draft this round, press \"send choices\" to move on.</string>
     <string name="leftover">Leftover students</string>
     <string name="handling">Handling leftover students.</string>
+    <string name="mentor">Mentor choices</string>
+    <string name="send">Send</string>
+    <string name="enter_message">Enter message</string>
 </resources>

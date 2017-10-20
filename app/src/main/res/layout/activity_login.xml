@@ -74,22 +74,6 @@
             android:layout_below="@id/editText_username"
             android:background="@drawable/check"
             android:layout_marginBottom="45dp"/>
-        <!--<Button-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/button_show"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:text="@string/login"-->
-            <!--android:backgroundTint="@color/colorBackground"-->
-            <!--android:id="@+id/button_login"-->
-            <!--android:transitionName="button"/>-->
-        <!--<Button-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@android:color/transparent"-->
-            <!--android:text="@string/create"-->
-            <!--android:id="@+id/button_create"-->
-            <!--android:layout_below="@id/button_login"/>-->
         <LinearLayout
             android:layout_marginTop="20dp"
             android:layout_below="@id/editText_password"

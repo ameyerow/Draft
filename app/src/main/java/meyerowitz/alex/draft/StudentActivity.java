@@ -24,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class StudentActivity extends Activity {
-    private Button oceanside_button;
     private Toolbar student_toolbar;
     private com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar draft_progressBar;
     private ImageView profile_imageView;
@@ -81,13 +80,6 @@ public class StudentActivity extends Activity {
 
         teacher_textView = findViewById(R.id.textView_teacher);
         email_textView = findViewById(R.id.textView_email);
-
-        oceanside_button = findViewById(R.id.button_oceanside);
-        oceanside_button.setTransformationMethod(null);
-        oceanside_button.setOnClickListener(e -> {
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://oceansideschools.org/"));
-            startActivity(i);
-        });
     }
 
     @Override

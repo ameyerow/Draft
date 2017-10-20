@@ -7,7 +7,7 @@
         android:id="@+id/scrollView_teacherCreate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent">
+        android:background="@color/colorLight">
         <RelativeLayout
             android:layout_width="275dp"
             android:layout_height="wrap_content"

@@ -48,6 +48,9 @@
         <activity android:name=".StudentActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
+        <activity android:name=".StudentMessagingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity android:name=".TeacherActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
