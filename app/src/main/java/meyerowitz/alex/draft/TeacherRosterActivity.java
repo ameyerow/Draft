@@ -45,26 +45,26 @@ public class TeacherRosterActivity extends ListActivity {
         shortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         lastPositionPressed = -1;
 
-        email_imageView = (ImageView) findViewById(R.id.imageView_email);
-        email_imageView.setImageResource(R.drawable.email);
-        singlePerson_textView = (TextView) findViewById(R.id.textView_singlePerson);
+        email_imageView = findViewById(R.id.imageView_email);
+        email_imageView.setImageResource(R.drawable.ic_email);
+        singlePerson_textView = findViewById(R.id.textView_singlePerson);
 
-        emailFirst_imageView = (ImageView) findViewById(R.id.imageView_email_first);
-        emailFirst_imageView.setImageResource(R.drawable.email);
-        partneredFirst_textView = (TextView) findViewById(R.id.textView_partnered_first);
+        emailFirst_imageView = findViewById(R.id.imageView_email_first);
+        emailFirst_imageView.setImageResource(R.drawable.ic_email);
+        partneredFirst_textView = findViewById(R.id.textView_partnered_first);
 
-        emailSecond_imageView = (ImageView) findViewById(R.id.imageView_email_second);
-        emailSecond_imageView.setImageResource(R.drawable.email);
-        partneredSecond_textView = (TextView) findViewById(R.id.textView_partnered_second);
+        emailSecond_imageView = findViewById(R.id.imageView_email_second);
+        emailSecond_imageView.setImageResource(R.drawable.ic_email);
+        partneredSecond_textView = findViewById(R.id.textView_partnered_second);
 
-        roster_toolbar = (Toolbar) findViewById(R.id.toolbar);
+        roster_toolbar = findViewById(R.id.toolbar);
         roster_toolbar.setTitle("Current roster");
         roster_toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         roster_toolbar.setNavigationOnClickListener(e -> onBackPressed());
 
-        list_layout = (RelativeLayout) findViewById(R.id.layout_list);
-        partnered_layout = (RelativeLayout) findViewById(R.id.layout_partnered);
-        singlePerson_layout = (RelativeLayout) findViewById(R.id.layout_singlePerson);
+        list_layout = findViewById(R.id.layout_list);
+        partnered_layout = findViewById(R.id.layout_partnered);
+        singlePerson_layout = findViewById(R.id.layout_singlePerson);
 
         names = getIntent().getStringArrayListExtra(EXTRA_NAMES);
         emails = getIntent().getStringArrayListExtra(EXTRA_EMAILS);

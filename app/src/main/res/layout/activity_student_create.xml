@@ -138,9 +138,11 @@
                 android:layout_marginBottom="44dp"/>
         </RelativeLayout>
     </ScrollView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -148,6 +150,6 @@
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            android:transitionName="@string/toolbar"/>
+            android:transitionName="@string/toolbar" />
     </RelativeLayout>
 </FrameLayout>

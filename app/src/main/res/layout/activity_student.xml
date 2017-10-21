@@ -73,7 +73,7 @@
                             android:layout_width="match_parent"
                             app:rcBackgroundPadding="5dp"
                             app:rcBackgroundColor="@color/gray"
-                            app:rcProgressColor="@color/colorPrimary"
+                            app:rcProgressColor="@color/colorBackground"
                             app:rcProgress="0"
                             app:rcRadius="4dp"/>
                     </LinearLayout>

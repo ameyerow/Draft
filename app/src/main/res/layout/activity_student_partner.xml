@@ -33,7 +33,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="500dp"
-            android:background="@color/colorAccent"
+            android:background="@color/colorLight"
             android:elevation="5dp"
             android:layout_gravity="bottom"
             android:id="@+id/layout"

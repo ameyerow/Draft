@@ -2,40 +2,51 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorLightest">
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/backdrop"
+        android:scaleType="fitXY"/>
     <RelativeLayout
         android:id="@+id/layout_partnered"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:visibility="gone">
-        <ImageView
-            android:layout_marginTop="65dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="10dp"
-            android:id="@+id/imageView_email_first"/>
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:id="@+id/textView_partnered_first"
-            android:layout_toEndOf="@id/imageView_email_first" />
-        <ImageView
-            android:layout_below="@id/imageView_email_first"
-            android:layout_marginTop="20dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="10dp"
-            android:id="@+id/imageView_email_second"/>
-        <TextView
+            android:id="@+id/layout_email1"
+            android:layout_marginTop="85dp">
+            <ImageView
+                android:id="@+id/imageView_email_first"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp" />
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_partnered_first" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imageView_email_first"
-            android:layout_marginTop="35dp"
-            android:id="@+id/textView_partnered_second"
-            android:layout_toEndOf="@id/imageView_email_second" />
+            android:id="@+id/layout_email2"
+            android:layout_below="@id/layout_email1"
+            android:layout_marginTop="20dp">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/imageView_email_second"/>
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_partnered_second"/>
+        </LinearLayout>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/layout_singlePerson"
@@ -43,18 +54,21 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:visibility="gone">
-        <ImageView
-            android:layout_marginTop="100dp"
-            android:layout_marginEnd="10dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/imageView_email"/>
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="115dp"
-            android:id="@+id/textView_singlePerson"
-            android:layout_toEndOf="@id/imageView_email" />
+            android:layout_marginTop="115dp">
+            <ImageView
+                android:layout_marginEnd="10dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/imageView_email"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_singlePerson"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
     </RelativeLayout>
     <LinearLayout
         android:orientation="vertical"

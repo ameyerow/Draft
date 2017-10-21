@@ -43,7 +43,7 @@
     <string name="being">Accounts are being created</string>
     <string name="completed">The draft is complete</string>
     <string name="no_one_to_draft">There\'s no one to draft this round, press \"send choices\" to move on.</string>
-    <string name="leftover">Leftover students</string>
+    <string name="leftover">Leftover Students</string>
     <string name="handling">Handling leftover students</string>
     <string name="mentor">Mentor choices</string>
     <string name="send">Send</string>
@@ -60,4 +60,14 @@
     <string name="mentor_picks">YOUR MENTOR PICKS</string>
     <string name="mentorName">Mentor Name</string>
     <string name="your_mentor">YOUR MENTOR</string>
+    <string name="teacher_name">Teacher Name</string>
+    <string name="classRow">Class Count:</string>
+    <string name="exampleClassCount">2</string>
+    <string name="DRAFT">DRAFT</string>
+    <string name="exampleRoster">10 students</string>
+    <string name="rosterButton">Roster</string>
+    <string name="draft_students">Draft Students</string>
+    <string name="exampleDraft">5 slots available</string>
+    <string name="leftoverButton">Claim</string>
+    <string name="leftoverExample">2 students need mentors</string>
 </resources>
