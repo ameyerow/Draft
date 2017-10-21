@@ -3,11 +3,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/backdrop"/>
     <ScrollView
         android:id="@+id/scrollView_studentCreate"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorLight">
+        android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="275dp"
             android:layout_height="wrap_content"
@@ -43,7 +47,8 @@
                 android:id="@+id/imageView_contact"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/editText_last_name"
-                android:transitionName="contact"/>
+                android:transitionName="contact"
+                android:src="@drawable/contact"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

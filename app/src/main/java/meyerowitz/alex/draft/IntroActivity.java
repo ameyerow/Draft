@@ -39,7 +39,6 @@ import java.util.Map;
 
 public class IntroActivity extends Activity {
     private static final int MY_PERMISSIONS_REQUEST_INTERNET = 0;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_NETWORK_STATE = 1;
 
     private static VideoView intro_videoView;
     private ImageView intro_imageView;

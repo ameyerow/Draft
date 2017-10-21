@@ -9,12 +9,10 @@ import android.text.TextUtils;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.Toolbar;
@@ -53,10 +51,6 @@ public class StudentLoginActivity extends Activity {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance().getReference();
         students = database.child("students");
-
-        login_imageView = findViewById(R.id.imageView_login);
-        login_imageView.setImageResource(R.drawable.blurred_background);
-        login_imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
         login_toolbar = findViewById(R.id.toolbar);
         login_toolbar.setTitle("Student Login");

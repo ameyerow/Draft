@@ -3,14 +3,12 @@ package meyerowitz.alex.draft;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
@@ -25,23 +23,32 @@ import com.google.firebase.database.ValueEventListener;
 
 public class StudentActivity extends Activity {
     private Toolbar student_toolbar;
-    private com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar draft_progressBar;
-    private ImageView profile_imageView;
-    private TextView profile_textView;
+
     private TextView draft_textView;
+    private com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar draft_progressBar;
+
+    private RelativeLayout profile_relativeLayout;
+    private TextView studentName_textView;
+    private TextView studentEmail_textView;
+    private TextView studentProject_textView;
+    private ImageView partnerSeparator;
+    private LinearLayout partner_layout;
+    private TextView partnerName_textView;
+
+    private RelativeLayout mentorPicks_relativeLayout;
     private TextView first_textView;
     private TextView second_textView;
     private TextView third_textView;
-    private TextView teacher_textView;
-    private TextView email_textView;
-    private RelativeLayout choices_layout;
-    private RelativeLayout drafted_layout;
 
-    private boolean goBack;
+    private RelativeLayout mentorDrafted_relativeLayout;
+    private TextView mentorName_textView;
+    private TextView mentorEmail_textView;
 
     private DatabaseReference profile;
     private DatabaseReference database;
     private FirebaseAuth auth;
+
+    private boolean goBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +60,8 @@ public class StudentActivity extends Activity {
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
 
-        goBack = false;
-
         database = FirebaseDatabase.getInstance().getReference();
         profile = database.child("students").child(user.getUid());
-
-        choices_layout = findViewById(R.id.layout_choices);
-        drafted_layout = findViewById(R.id.layout_drafted);
 
         student_toolbar = findViewById(R.id.toolbar);
         student_toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -68,18 +70,25 @@ public class StudentActivity extends Activity {
             onBackPressed();
         });
 
-        draft_progressBar = findViewById(R.id.progressBar_draft);
         draft_textView = findViewById(R.id.textView_draft);
+        draft_progressBar = findViewById(R.id.progressBar_draft);
 
-        profile_imageView = findViewById(R.id.imageView_profile);
-        profile_textView = findViewById(R.id.textView_profile);
+        profile_relativeLayout = findViewById(R.id.relativeLayout_profile);
+        studentName_textView = findViewById(R.id.textView_name);
+        studentEmail_textView = findViewById(R.id.textView_studentEmail);
+        studentProject_textView = findViewById(R.id.textView_studentProject);
+        partnerSeparator = findViewById(R.id.separator3);
+        partner_layout = findViewById(R.id.layout_partner);
+        partnerName_textView = findViewById(R.id.textView_partnerName);
 
+        mentorPicks_relativeLayout = findViewById(R.id.relativeLayout_mentorPicks);
         first_textView = findViewById(R.id.textView_first);
         second_textView = findViewById(R.id.textView_second);
         third_textView = findViewById(R.id.textView_third);
 
-        teacher_textView = findViewById(R.id.textView_teacher);
-        email_textView = findViewById(R.id.textView_email);
+        mentorDrafted_relativeLayout = findViewById(R.id.relativeLayout_mentorDrafted);
+        mentorName_textView = findViewById(R.id.textView_mentorName);
+        mentorEmail_textView = findViewById(R.id.textView_mentorEmail);
     }
 
     @Override
@@ -94,21 +103,23 @@ public class StudentActivity extends Activity {
                 first_textView.setText((String) dataSnapshot.child("firstChoice").getValue());
                 second_textView.setText((String) dataSnapshot.child("secondChoice").getValue());
                 third_textView.setText((String) dataSnapshot.child("thirdChoice").getValue());
-                student_toolbar.setTitle(dataSnapshot.child("firstName").getValue() + " "
-                        + dataSnapshot.child("lastName").getValue());
+                studentEmail_textView.setText((String) dataSnapshot.child("email").getValue());
+                studentProject_textView.setText((String) dataSnapshot.child("projectIdea").getValue());
+                String name = dataSnapshot.child("firstName").getValue() + " "
+                        + dataSnapshot.child("lastName").getValue();
+                student_toolbar.setTitle(name);
+                studentName_textView.setText(name);
+
                 boolean partnered = (boolean) dataSnapshot.child("partnered").getValue();
                 if(partnered) {
-                    profile_imageView.setImageResource(R.drawable.contact_partners);
-                    String name = dataSnapshot.child("firstName").getValue() + " "
-                            + dataSnapshot.child("lastName").getValue();
                     String partner_name = dataSnapshot.child("partnerFirst").getValue() + " "
                             + dataSnapshot.child("partnerLast").getValue();
-                    profile_textView.setText(name + " and " + partner_name);
+                    partnerName_textView.setText(partner_name);
+                    partnerSeparator.setVisibility(View.VISIBLE);
+                    partner_layout.setVisibility(View.VISIBLE);
                 } else {
-                    profile_imageView.setImageResource(R.drawable.contact_second);
-                    String name = dataSnapshot.child("firstName").getValue() + " "
-                            + dataSnapshot.child("lastName").getValue();
-                    profile_textView.setText(name);
+                    partnerSeparator.setVisibility(View.GONE);
+                    partner_layout.setVisibility(View.GONE);
                 }
             }
         });
@@ -130,8 +141,7 @@ public class StudentActivity extends Activity {
                 ValueAnimator animator = ValueAnimator.ofFloat(currentProgress, (float)((draft*33) + 1));
                 animator.addUpdateListener(e -> {
                     float updatedValue = (float) e.getAnimatedValue();
-                    draft_progressBar.setSecondaryProgress(updatedValue);
-                    draft_progressBar.setProgress(updatedValue - 5);
+                    draft_progressBar.setProgress(updatedValue);
                 });
                 animator.setDuration(160);
                 animator.start();
@@ -143,7 +153,7 @@ public class StudentActivity extends Activity {
                 } else if(draft == 5) {
                     draft_textView.setText(R.string.completed);
                 } else {
-                    draft_textView.setText("The draft is currently in round " + draft + " of 3.");
+                    draft_textView.setText("Round " + draft + " of 3");
                 }
             }
         });
@@ -158,14 +168,14 @@ public class StudentActivity extends Activity {
                 if(drafted) {
                     String teacher = (String) dataSnapshot.child("teacher").getValue();
                     String email = (String) dataSnapshot.child("teacherEmail").getValue();
-                    teacher_textView.setText(teacher);
-                    email_textView.setText(email);
+                    mentorName_textView.setText(teacher);
+                    mentorEmail_textView.setText(email);
 
-                    drafted_layout.setVisibility(View.VISIBLE);
-                    choices_layout.setVisibility(View.GONE);
+                    mentorDrafted_relativeLayout.setVisibility(View.VISIBLE);
+                    mentorPicks_relativeLayout.setVisibility(View.GONE);
                 } else {
-                    choices_layout.setVisibility(View.VISIBLE);
-                    drafted_layout.setVisibility(View.GONE);
+                    mentorPicks_relativeLayout.setVisibility(View.VISIBLE);
+                    mentorDrafted_relativeLayout.setVisibility(View.GONE);
                 }
             }
         });
@@ -178,8 +188,6 @@ public class StudentActivity extends Activity {
         getWindow().setEnterTransition(fade_transition);
         getWindow().setExitTransition(fade_transition);
     }
-
-
 
     @Override
     public void onBackPressed() {

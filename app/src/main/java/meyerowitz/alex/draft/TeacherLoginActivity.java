@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -27,8 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 public class TeacherLoginActivity extends Activity {
     private ImageView login_imageView;
@@ -54,10 +51,6 @@ public class TeacherLoginActivity extends Activity {
         database = FirebaseDatabase.getInstance().getReference();
         teachers = database.child("teachers");
         auth = FirebaseAuth.getInstance();
-
-        login_imageView = findViewById(R.id.imageView_login);
-        login_imageView.setImageResource(R.drawable.blurred_background);
-        login_imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
         login_toolbar = findViewById(R.id.toolbar);
         login_toolbar.setTitle("Teacher Login");

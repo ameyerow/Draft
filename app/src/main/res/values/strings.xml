@@ -40,12 +40,24 @@
     <string name="deny">Deny</string>
     <string name="send_choices">Send choices</string>
     <string name="notified">You will be notified when account creation is available</string>
-    <string name="being">Accounts are being created.</string>
-    <string name="completed">The draft is complete.</string>
+    <string name="being">Accounts are being created</string>
+    <string name="completed">The draft is complete</string>
     <string name="no_one_to_draft">There\'s no one to draft this round, press \"send choices\" to move on.</string>
     <string name="leftover">Leftover students</string>
-    <string name="handling">Handling leftover students.</string>
+    <string name="handling">Handling leftover students</string>
     <string name="mentor">Mentor choices</string>
     <string name="send">Send</string>
     <string name="enter_message">Enter message</string>
+    <string name="draft_progress">DRAFT PROGRESS</string>
+    <string name="round">Round 1</string>
+    <string name="profile">YOUR PROFILE</string>
+    <string name="student_name">Student Name</string>
+    <string name="emailRow">Email:</string>
+    <string name="exampleEmail">example@gmail.com</string>
+    <string name="projectRow">Project:</string>
+    <string name="exampleProject">The Moon is a barren, rocky world without air and water. It has dark lava plain on its surface. The Moon is filled with craters. It has no light of its own. It gets its light from the Sun.</string>
+    <string name="partnerRow">Partner:</string>
+    <string name="mentor_picks">YOUR MENTOR PICKS</string>
+    <string name="mentorName">Mentor Name</string>
+    <string name="your_mentor">YOUR MENTOR</string>
 </resources>
