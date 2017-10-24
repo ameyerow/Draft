@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -67,6 +68,7 @@ public class TeacherActivity extends Activity {
 
         goBack = false;
         finished = false;
+        draft = -1;
 
         database = FirebaseDatabase.getInstance().getReference();
         profile = database.child("teachers").child(user.getUid());
@@ -304,7 +306,7 @@ public class TeacherActivity extends Activity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 finished = (boolean) dataSnapshot.child("finished").getValue();
 
-                if(finished) {
+                if(finished || draft < 1) {
                     separatorDraft.setVisibility(View.GONE);
                     draft_relativeLayout.setVisibility(View.GONE);
                 } else {
@@ -329,6 +331,9 @@ public class TeacherActivity extends Activity {
                         separatorLeftover.setVisibility(View.GONE);
                         leftover_relativeLayout.setVisibility(View.GONE);
                     }
+                } else {
+                    separatorLeftover.setVisibility(View.GONE);
+                    leftover_relativeLayout.setVisibility(View.GONE);
                 }
             }
         });

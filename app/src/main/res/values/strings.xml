@@ -69,5 +69,7 @@
     <string name="draft_students">Draft Students</string>
     <string name="exampleDraft">5 slots available</string>
     <string name="leftoverButton">Claim</string>
-    <string name="leftoverExample">2 students need mentors</string>
+    <string name="leftoverExample">Students need mentors</string>
+    <string name="empty">Nobody in Roster</string>
+    <string name="all_done">Hit Send!</string>
 </resources>

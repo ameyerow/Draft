@@ -1,31 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorLightest">
+    android:background="@color/lightGray">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginTop="56dp"
-            android:gravity="center"
-            android:id="@+id/textView_currentNum"
-            android:background="@color/colorPrimary"/>
-        <Button
-            android:id="@+id/button_sendChoices"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/textView_currentNum"
-            android:text="@string/send_choices"
-            android:background="@color/colorBackground"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp">
         <RelativeLayout
-            android:layout_below="@id/button_sendChoices"
             android:id="@+id/layout_information"
             android:layout_width="wrap_content"
-            android:layout_height="194dp"
+            android:layout_height="200dp"
             android:layout_centerHorizontal="true">
             <ImageView
                 android:id="@+id/imageView_project"
@@ -43,28 +29,24 @@
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
         <LinearLayout
-            android:layout_below="@id/button_sendChoices"
-            android:layout_width="match_parent"
-            android:layout_height="234dp"
-            android:orientation="horizontal">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_below="@id/layout_information">
             <Button
-                android:id="@+id/button_accept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/accept"
-                android:layout_gravity="bottom"
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="40dp"
-                android:elevation="40dp"
-                android:background="@color/colorBackground"/>
+                android:backgroundTint="@color/colorAccent"
+                android:id="@+id/button_accept"/>
             <Button
-                android:id="@+id/button_deny"
-                android:layout_gravity="bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/deny"
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="40dp"
-                android:elevation="40dp"
-                android:background="@color/colorBackground"/>
+                android:backgroundTint="@color/colorAccent"
+                android:layout_gravity="end"
+                android:id="@+id/button_deny"/>
         </LinearLayout>
     </RelativeLayout>
     <LinearLayout
@@ -77,15 +59,50 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            android:transitionName="@string/toolbar"/>
+            android:theme="?attr/actionBarTheme">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_send"
+                    android:id="@+id/button_sendChoices"
+                    android:layout_marginEnd="10dp"/>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_help"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/button_help"/>
+            </LinearLayout>
+        </Toolbar>
         <RelativeLayout
             android:id="@+id/layout_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="70dp"
             android:layout_gravity="bottom"
-            android:background="@color/colorLight">
+            android:background="@android:color/white">
+            <ImageView
+                android:id="@+id/imageView_empty"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="200dp"
+                android:src="@drawable/empty"
+                android:visibility="gone"
+                android:layout_centerHorizontal="true"/>
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/textView_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageView_empty"
+                android:layout_centerHorizontal="true"
+                android:text="@string/all_done"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             <ListView
                 android:id="@android:id/list"
                 android:layout_height="wrap_content"
@@ -93,14 +110,20 @@
             </ListView>
         </RelativeLayout>
     </LinearLayout>
-    <TextView
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:gravity="center"
-        android:id="@+id/textView_empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/no_one_to_draft"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
-</FrameLayout>
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_marginBottom="40dp"-->
+        <!--android:background="@color/colorAccent"-->
+        <!--android:padding="10dp">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text="10 slots available"-->
+            <!--android:textAppearance="@style/TextAppearance.AppCompat.Body2" />-->
+    <!--</LinearLayout>-->
+</RelativeLayout>

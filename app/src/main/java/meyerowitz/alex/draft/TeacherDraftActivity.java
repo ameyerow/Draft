@@ -5,8 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -47,11 +50,13 @@ public class TeacherDraftActivity extends ListActivity {
     private ImageView project_imageView;
     private TextView project_textView;
     private Toolbar draft_toolbar;
-    private Button sendChoices_button;
+    private ImageButton sendChoices_button;
     private Button accept_button;
     private Button deny_button;
     private TextView empty_textView;
-    private TextView currentNum_textView;
+    private ImageView empty_imageView;
+    //private TextView currentNum_textView;
+    private ImageButton help_button;
 
     private DatabaseReference database;
     private DatabaseReference teacher;
@@ -249,8 +254,8 @@ public class TeacherDraftActivity extends ListActivity {
                             || drafted.get(lastPositionPressed) == null)
                         numCanDraft = numCanDraft - 1;
                     drafted.set(lastPositionPressed, true);
-                    lastImageView.setImageResource(R.drawable.accept_single);
-                    currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
+                    lastImageView.setImageResource(R.drawable.ic_accept);
+                    //currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 } else {
                     Toast.makeText(this, "Not enough space left.", Toast.LENGTH_SHORT).show();
                 }
@@ -260,8 +265,8 @@ public class TeacherDraftActivity extends ListActivity {
                             || drafted.get(lastPositionPressed) == null)
                         numCanDraft = numCanDraft - 2;
                     drafted.set(lastPositionPressed, true);
-                    lastImageView.setImageResource(R.drawable.accept_partners);
-                    currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
+                    lastImageView.setImageResource(R.drawable.ic_accept);
+                    //currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 } else {
                     Toast.makeText(this, "Not enough space left.", Toast.LENGTH_SHORT).show();
                 }
@@ -274,21 +279,33 @@ public class TeacherDraftActivity extends ListActivity {
             if (name.substring(0, 1).equals("1")) {
                 if(drafted.get(lastPositionPressed) != null && drafted.get(lastPositionPressed)) {
                     numCanDraft = numCanDraft + 1;
-                    currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
+                    //currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 }
-                lastImageView.setImageResource(R.drawable.deny_single);
+                lastImageView.setImageResource(R.drawable.ic_deny);
             } else {
                 if(drafted.get(lastPositionPressed) != null && drafted.get(lastPositionPressed)) {
                     numCanDraft = numCanDraft + 2;
-                    currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
+                    //currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 }
-                lastImageView.setImageResource(R.drawable.deny_partners);
+                lastImageView.setImageResource(R.drawable.ic_deny);
             }
             drafted.set(lastPositionPressed, false);
         });
 
         empty_textView = findViewById(R.id.textView_empty);
-        currentNum_textView = findViewById(R.id.textView_currentNum);
+        empty_imageView = findViewById(R.id.imageView_empty);
+        //currentNum_textView = findViewById(R.id.textView_currentNum);
+
+        help_button = findViewById(R.id.button_help);
+        help_button.setOnClickListener(e -> {
+            new AlertDialog.Builder(TeacherDraftActivity.this)
+                    .setTitle("Help")
+                    .setMessage("1. Press a student on your list and read their project\n" +
+                                "2. Choose to either \"accept\" or \"deny\" them\n" +
+                                "3. Repeat this for every student on your list\n" +
+                                "4. Once you're done, hit send in the top right")
+                    .setPositiveButton(android.R.string.yes, null).show();
+        });
 
         names = getIntent().getStringArrayListExtra(EXTRA_NAMES);
         projects = getIntent().getStringArrayListExtra(EXTRA_PROJECTS);
@@ -301,6 +318,7 @@ public class TeacherDraftActivity extends ListActivity {
 
         if(names.size() == 0) {
             empty_textView.setVisibility(View.VISIBLE);
+            empty_imageView.setVisibility(View.VISIBLE);
         }
 
         NameAdapter adapter = new NameAdapter(names);
@@ -319,7 +337,7 @@ public class TeacherDraftActivity extends ListActivity {
                 long currentNumDrafted = (long) dataSnapshot.child("currentNumDrafted").getValue();
                 maxNum = (long) dataSnapshot.child("numberClasses").getValue() * 10;
                 numCanDraft = maxNum - currentNumDrafted;
-                currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
+                //currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 teacherName = dataSnapshot.child("firstName").getValue() + " " + dataSnapshot.child("lastName").getValue();
                 teacherEmail = (String) dataSnapshot.child("email").getValue();
             }
@@ -344,11 +362,11 @@ public class TeacherDraftActivity extends ListActivity {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         int initialHeight =  (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 126,
+                TypedValue.COMPLEX_UNIT_DIP, 56,
                 getResources().getDisplayMetrics()
         );
         int translatedHeight = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 360,
+                TypedValue.COMPLEX_UNIT_DIP, 306,
                 getResources().getDisplayMetrics()
         );
 
@@ -441,19 +459,19 @@ public class TeacherDraftActivity extends ListActivity {
 
             if(drafted.get(position) == null) {
                 if (partnered) {
-                    listItem_imageView.setImageResource(R.drawable.contact_partners);
+                    listItem_imageView.setImageResource(R.drawable.ic_group);
                 } else {
-                    listItem_imageView.setImageResource(R.drawable.contact_second);
+                    listItem_imageView.setImageResource(R.drawable.ic_account);
                 }
             } else {
                 if(partnered && drafted.get(position)) {
-                    listItem_imageView.setImageResource(R.drawable.accept_partners);
+                    listItem_imageView.setImageResource(R.drawable.ic_accept);
                 } else if(partnered && !drafted.get(position)) {
-                    listItem_imageView.setImageResource(R.drawable.deny_partners);
+                    listItem_imageView.setImageResource(R.drawable.ic_deny);
                 } else if(!partnered && drafted.get(position)) {
-                    listItem_imageView.setImageResource(R.drawable.accept_single);
+                    listItem_imageView.setImageResource(R.drawable.ic_accept);
                 } else if(!partnered && !drafted.get(position)) {
-                    listItem_imageView.setImageResource(R.drawable.deny_single);
+                    listItem_imageView.setImageResource(R.drawable.ic_deny);
                 }
             }
 

@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class TeacherRosterActivity extends ListActivity {
@@ -31,6 +33,8 @@ public class TeacherRosterActivity extends ListActivity {
     private ImageView emailSecond_imageView;
     private TextView partneredSecond_textView;
     private Toolbar roster_toolbar;
+    private ImageView empty_imageView;
+    private TextView empty_textView;
 
     private ArrayList<String> names;
     private ArrayList<String> emails;
@@ -66,8 +70,16 @@ public class TeacherRosterActivity extends ListActivity {
         partnered_layout = findViewById(R.id.layout_partnered);
         singlePerson_layout = findViewById(R.id.layout_singlePerson);
 
+        empty_imageView = findViewById(R.id.imageView_empty);
+        empty_textView = findViewById(R.id.textView_empty);
+
         names = getIntent().getStringArrayListExtra(EXTRA_NAMES);
         emails = getIntent().getStringArrayListExtra(EXTRA_EMAILS);
+
+        if(names.size() == 0) {
+            empty_textView.setVisibility(View.VISIBLE);
+            empty_imageView.setVisibility(View.VISIBLE);
+        }
 
         NameAdapter adapter = new NameAdapter(names);
         setListAdapter(adapter);
@@ -222,9 +234,9 @@ public class TeacherRosterActivity extends ListActivity {
 
             ImageView listItem_imageView = convertView.findViewById(R.id.imageView_listItem);
             if(partnered) {
-                listItem_imageView.setImageResource(R.drawable.contact_partners);
+                listItem_imageView.setImageResource(R.drawable.ic_group);
             } else {
-                listItem_imageView.setImageResource(R.drawable.contact_second);
+                listItem_imageView.setImageResource(R.drawable.ic_account);
             }
 
             TextView name_textView = convertView.findViewById(R.id.textView_name);

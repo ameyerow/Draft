@@ -330,9 +330,9 @@ public class TeacherLeftoverActivity extends ListActivity {
             ImageView listItem_imageView = convertView.findViewById(R.id.imageView_listItem);
 
             if (partnered) {
-                listItem_imageView.setImageResource(R.drawable.contact_partners);
+                listItem_imageView.setImageResource(R.drawable.ic_group);
             } else {
-                listItem_imageView.setImageResource(R.drawable.contact_second);
+                listItem_imageView.setImageResource(R.drawable.ic_account);
             }
 
             TextView name_textView = convertView.findViewById(R.id.textView_name);
