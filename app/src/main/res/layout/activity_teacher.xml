@@ -17,6 +17,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        android:titleTextColor="@android:color/black"
         android:transitionName="@string/toolbar"
         android:title="@string/teacher_name"/>
     <ScrollView

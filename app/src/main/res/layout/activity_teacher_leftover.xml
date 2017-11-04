@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
+            android:titleTextColor="@android:color/black"
             android:theme="?attr/actionBarTheme"
             android:transitionName="@string/toolbar" />
         <RelativeLayout

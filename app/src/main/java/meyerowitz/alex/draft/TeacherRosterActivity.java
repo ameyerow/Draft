@@ -62,7 +62,7 @@ public class TeacherRosterActivity extends ListActivity {
         partneredSecond_textView = findViewById(R.id.textView_partnered_second);
 
         roster_toolbar = findViewById(R.id.toolbar);
-        roster_toolbar.setTitle("Current roster");
+        roster_toolbar.setTitle("Current Roster");
         roster_toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         roster_toolbar.setNavigationOnClickListener(e -> onBackPressed());
 

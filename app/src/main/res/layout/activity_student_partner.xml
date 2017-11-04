@@ -18,7 +18,8 @@
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            android:transitionName="@string/toolbar"/>
+            android:transitionName="@string/toolbar"
+            android:titleTextColor="@android:color/black"/>
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"

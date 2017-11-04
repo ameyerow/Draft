@@ -30,7 +30,8 @@
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            android:transitionName="@string/toolbar"/>
+            android:transitionName="@string/toolbar"
+            android:titleTextColor="@android:color/black"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

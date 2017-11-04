@@ -299,22 +299,23 @@ public class TeacherActivity extends Activity {
             }
         });
 
-        database.child("teachers").child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                finished = (boolean) dataSnapshot.child("finished").getValue();
+        if(auth.getCurrentUser() != null)
+            database.child("teachers").child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    finished = (boolean) dataSnapshot.child("finished").getValue();
 
-                if(finished || draft < 1) {
-                    separatorDraft.setVisibility(View.GONE);
-                    draft_relativeLayout.setVisibility(View.GONE);
-                } else {
-                    separatorDraft.setVisibility(View.VISIBLE);
-                    draft_relativeLayout.setVisibility(View.VISIBLE);
+                    if(finished || draft < 1) {
+                        separatorDraft.setVisibility(View.GONE);
+                        draft_relativeLayout.setVisibility(View.GONE);
+                    } else {
+                        separatorDraft.setVisibility(View.VISIBLE);
+                        draft_relativeLayout.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
-        });
+            });
 
         database.child("leftover-students").child("complete").addValueEventListener(new ValueEventListener() {
             @Override

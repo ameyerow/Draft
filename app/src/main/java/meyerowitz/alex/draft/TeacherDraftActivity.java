@@ -255,6 +255,8 @@ public class TeacherDraftActivity extends ListActivity {
                         numCanDraft = numCanDraft - 1;
                     drafted.set(lastPositionPressed, true);
                     lastImageView.setImageResource(R.drawable.ic_accept);
+                    accept_button.setVisibility(View.GONE);
+                    deny_button.setVisibility(View.VISIBLE);
                     //currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 } else {
                     Toast.makeText(this, "Not enough space left.", Toast.LENGTH_SHORT).show();
@@ -266,6 +268,8 @@ public class TeacherDraftActivity extends ListActivity {
                         numCanDraft = numCanDraft - 2;
                     drafted.set(lastPositionPressed, true);
                     lastImageView.setImageResource(R.drawable.ic_accept);
+                    accept_button.setVisibility(View.GONE);
+                    deny_button.setVisibility(View.VISIBLE);
                     //currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 } else {
                     Toast.makeText(this, "Not enough space left.", Toast.LENGTH_SHORT).show();
@@ -282,12 +286,16 @@ public class TeacherDraftActivity extends ListActivity {
                     //currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 }
                 lastImageView.setImageResource(R.drawable.ic_deny);
+                deny_button.setVisibility(View.GONE);
+                accept_button.setVisibility(View.VISIBLE);
             } else {
                 if(drafted.get(lastPositionPressed) != null && drafted.get(lastPositionPressed)) {
                     numCanDraft = numCanDraft + 2;
                     //currentNum_textView.setText("You can draft " + numCanDraft + " more students.");
                 }
                 lastImageView.setImageResource(R.drawable.ic_deny);
+                deny_button.setVisibility(View.GONE);
+                accept_button.setVisibility(View.VISIBLE);
             }
             drafted.set(lastPositionPressed, false);
         });
@@ -372,6 +380,16 @@ public class TeacherDraftActivity extends ListActivity {
 
         if(lastPositionPressed == -1) {
             project_textView.setText(projects.get(position));
+            if(drafted.get(position) == null) {
+                accept_button.setVisibility(View.VISIBLE);
+                deny_button.setVisibility(View.VISIBLE);
+            } else if(drafted.get(position)) {
+                accept_button.setVisibility(View.GONE);
+                deny_button.setVisibility(View.VISIBLE);
+            } else {
+                accept_button.setVisibility(View.VISIBLE);
+                deny_button.setVisibility(View.GONE);
+            }
             list_layout.animate()
                     .y(translatedHeight)
                     .setDuration(shortAnimationDuration)
@@ -414,16 +432,26 @@ public class TeacherDraftActivity extends ListActivity {
             anim.start();
             lastPositionPressed = -1;
         } else {
+            if(drafted.get(position) == null) {
+                accept_button.setVisibility(View.VISIBLE);
+                deny_button.setVisibility(View.VISIBLE);
+            } else if(drafted.get(position)) {
+                accept_button.setVisibility(View.GONE);
+                deny_button.setVisibility(View.VISIBLE);
+            } else {
+                accept_button.setVisibility(View.VISIBLE);
+                deny_button.setVisibility(View.GONE);
+            }
             information_layout.animate()
                     .alpha(0f)
-                    .setDuration(160)
+                    .setDuration(100)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             project_textView.setText(projects.get(position));
                             information_layout.animate()
                                     .alpha(1f)
-                                    .setDuration(160)
+                                    .setDuration(100)
                                     .setListener(null);
                         }
                     });

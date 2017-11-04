@@ -47,6 +47,7 @@
             android:minHeight="?attr/actionBarSize"
             android:visibility="gone"
             android:theme="?attr/actionBarTheme"
+            android:titleTextColor="@android:color/black"
             android:transitionName="@string/toolbar"/>
         <Button
             android:layout_width="wrap_content"

@@ -11,7 +11,8 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        android:transitionName="@string/toolbar"/>
+        android:transitionName="@string/toolbar"
+        android:titleTextColor="@android:color/black"/>
     <ListView
         android:id="@android:id/list"
         android:layout_below="@id/toolbar"

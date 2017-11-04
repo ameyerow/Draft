@@ -28,7 +28,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class TeacherLoginActivity extends Activity {
-    private ImageView login_imageView;
     private Toolbar login_toolbar;
     private EditText username_editText;
     private EditText password_editText;
