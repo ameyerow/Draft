@@ -10,4 +10,5 @@
     <color name="gray">#E0E0E0</color>
     <color name="lightGray">#EEEEEE</color>
     <color name="darkGray">#BDBDBD</color>
+    <color name="launch">#F7F7F7</color>
 </resources>
